@@ -1,0 +1,21 @@
+services:
+    query2box-geom:
+        # Basic starting info
+        container_name: query2box-geom
+        image: nvidia/cuda:11.3.1-cudnn8-runtime-ubuntu20.04
+
+        # Set up workspace
+        working_dir: /workspace
+        volumes:
+            - ./geom/:/workspace/geom
+            - ./install/:/workspace/install
+
+        # Enable nvidia https://docs.docker.com/compose/gpu-support/
+        deploy: 
+            resources: 
+                reservations: 
+                    devices: 
+                        - capabilities: [gpu]
+        
+        # Install TWIG
+        command: bash -c "install/install.sh &> install/docker_up.log && tail -F /dev/null"
